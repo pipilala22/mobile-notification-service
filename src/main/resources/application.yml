@@ -1,0 +1,51 @@
+server:
+  port: ${APP_PORT:8080}
+spring:
+  application:
+    name: mobile-notification-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/notification
+    username: postgres
+    password: postgres
+  kafka:
+    enabled: true
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+    topics:
+        notification-single-sms: NOTIFICATION-SINGLE-SMS
+        notification-single-viber: NOTIFICATION-SINGLE-VIBER
+        notification-single-email: NOTIFICATION-SINGLE-EMAIL
+        notification-single-push: NOTIFICATION-SINGLE-PUSH
+    consumer:
+      bootstrap-servers: localhost:9092
+      group-id: ${spring.application.name}-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+      enable-auto-commit: true
+    admin:
+      properties:
+        bootstrap.servers: localhost:9092
+app:
+  api:
+    services:
+      notification:
+        host: ${NOTIFICATION_HOST:https://notification.bsb.by}
+        endpoints:
+          viber:
+            single: ${app.api.services.notification.host}/${NOTIFICATION_VIBER_SINGLE:api/notification/viber/single}
+          sms:
+            single: ${app.api.services.notification.host}/${SEND_SMS:api/notification/sms/single}
+          email:
+            single: ${app.api.services.notification.host}/${SEND_EMAIL_SINGLE:/api/notification/email/single}
+            broadcast: ${app.api.services.notification.host}/${SEND_EMAIL:/api/notification/email/broadcast}
+          push:
+            single: ${app.api.services.notification.host}/${NOTIFICATION_PUSH_SINGLE:api/notification/push/single}
+            broadcast: ${app.api.services.notification.host}/${NOTIFICATION_PUSH_BROADCAST:api/notification/push/broadcast}
+        url: ${ADDRESS_SERVICE_URL:https://notification.bsb.by:8082}
+
