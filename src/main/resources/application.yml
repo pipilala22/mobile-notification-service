@@ -7,6 +7,9 @@ spring:
     url: jdbc:postgresql://localhost:5432/notification
     username: postgres
     password: postgres
+  liquibase:
+    clear-checksums: true
+    change-log: classpath:changelog/db.changelog-master.yaml
   kafka:
     enabled: true
     bootstrap-servers: localhost:9092

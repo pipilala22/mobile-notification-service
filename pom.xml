@@ -139,6 +139,12 @@
       <scope>provided</scope>
     </dependency>
 
+    <!-- ========== Liquibase ========== -->
+    <dependency>
+      <groupId>org.liquibase</groupId>
+      <artifactId>liquibase-core</artifactId>
+    </dependency>
+
     <!-- ========== Внутренние зависимости ========== -->
     <dependency>
       <groupId>com.bsb.notification</groupId>
